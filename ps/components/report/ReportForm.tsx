@@ -63,6 +63,11 @@ export function ReportForm({ onComplete }: ReportFormProps) {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    console.log("=== IMAGE UPLOAD STARTED ===");
+    console.log("File name:", file.name);
+    console.log("File size:", file.size);
+    console.log("File type:", file.type);
+
     setIsAnalyzing(true);
 
     try {
@@ -76,6 +81,7 @@ export function ReportForm({ onComplete }: ReportFormProps) {
         reader.readAsDataURL(file);
       });
 
+      console.log("Base64 conversion complete, calling API...");
       const response = await fetch("/api/analyze-image", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -83,16 +89,29 @@ export function ReportForm({ onComplete }: ReportFormProps) {
       });
 
       if (response.ok) {
-        const data: ImageAnalysisResult = await response.json();
+        const data = await response.json();
+        console.log("=== API RESPONSE RECEIVED ===");
+        console.log("Response data:", data);
 
-        if (data.title && data.description && data.reportType) {
+        // Check if we have valid data
+        if (data && typeof data === 'object') {
+          console.log("=== UPDATING FORM DATA ===");
+          console.log("Title:", data.title);
+          console.log("Description:", data.description);
+          console.log("Report Type:", data.reportType);
+          
           setFormData((prev) => ({
             ...prev,
-            title: data.title,
-            description: data.description,
-            specificType: data.reportType,
+            title: data.title || prev.title,
+            description: data.description || prev.description,
+            specificType: data.reportType || prev.specificType,
           }));
+          console.log("Form data updated successfully");
+        } else {
+          console.log("Invalid response data structure:", data);
         }
+      } else {
+        console.log("API response not OK:", response.status, response.statusText);
       }
       
       setImage(base64);
