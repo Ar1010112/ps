@@ -54,8 +54,7 @@ export default function Navbar() {
                     />
                   </svg>
                 </motion.div>
-                <span className="text-lg font-bold bg-gradient-to-r from-gray-900 to-gray-700 
-                               dark:from-white dark:to-gray-300 bg-clip-text text-transparent
+                <span className="text-lg font-bold bg-white bg-clip-text text-transparent
                                light:from-gray-900 light:to-gray-700">
                   CivicSafe
                 </span>
@@ -78,7 +77,7 @@ export default function Navbar() {
                 >
                   <Link
                     href={href}
-                    className="relative text-sm text-gray-600 dark:text-zinc-300 light:text-gray-700
+                    className="relative text-sm text-white 
                              hover:text-gray-900 dark:hover:text-white light:hover:text-gray-900
                              transition-all group font-medium"
                   >
